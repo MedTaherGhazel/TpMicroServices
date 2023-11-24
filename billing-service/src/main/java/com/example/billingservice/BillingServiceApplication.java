@@ -24,20 +24,23 @@ import java.util.Date;
 import java.util.List;
 @Data
 class Product{
-    private Long id; private String name; private double price;
+    private Long id;
+    private String name;
+    private double price;
 }
-
 @Data
 class Customer {
     private Long id;
-    private String name; private String email;
+    private String name;
+    private String email;
 }
 
 @Entity @Data @NoArgsConstructor @AllArgsConstructor
 class Bill{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; private Date billingDate;
+    private Long id;
+    private Date billingDate;
     @Transient
     @OneToMany(mappedBy = "bill")
     private Collection<ProductItem> productItems;
@@ -51,7 +54,11 @@ class ProductItem{
     @Id @GeneratedValue(strategy =GenerationType.IDENTITY)
     private Long id;
     @Transient
-    private Product product; private long productID; private double price; private double quantity; @ManyToOne
+    private Product product;
+    private long productID;
+    private double price;
+    private double quantity;
+    @ManyToOne
     @JsonProperty(access =JsonProperty.Access.WRITE_ONLY)
     private Bill bill;
 }
@@ -75,17 +82,21 @@ interface CustomerServiceClient{
 @FeignClient(name="inventory-service")
 interface InventoryServiceClient{
     @GetMapping("/products/{id}?projection=fullProduct")
-    Product findProductById(@PathVariable("id") Long id); @GetMapping("/products?projection=fullProduct")
-PagedModel<Product> findAll();
+    Product findProductById(@PathVariable("id") Long id);
+    @GetMapping("/products?projection=fullProduct")
+    PagedModel<Product> findAll();
 }
 
 @RestController
 class BillRestController{
     @Autowired
     private BillRepository billRepository;
-    @Autowired private ProductItemRepository productItemRepository;
-    @Autowired private CustomerServiceClient customerServiceClient;
-    @Autowired private InventoryServiceClient inventoryServiceClient;
+    @Autowired
+    private ProductItemRepository productItemRepository;
+    @Autowired
+    private CustomerServiceClient customerServiceClient;
+    @Autowired
+    private InventoryServiceClient inventoryServiceClient;
     @GetMapping("/bills/full/{id}")
     Bill getBill(@PathVariable(name="id") Long id) {
         Bill bill=billRepository.findById(id).get();

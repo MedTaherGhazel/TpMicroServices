@@ -1,10 +1,10 @@
-package com.example.billingservice;
+package com.example.microService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BillingServiceApplicationTests {
+class MicroServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
